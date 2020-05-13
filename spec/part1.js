@@ -229,7 +229,7 @@
       });
 
       it('returns -1 when the target cannot be found not in the list', function() {
-        var numbers = [1,2,3];
+        var numbers = [1, 2, 3];
 
         expect(_.indexOf(numbers, 35)).to.equal(-1);
       });
@@ -503,7 +503,7 @@
         expect(result).to.equal(4);
       });
 
-      it('Fill me in with a description of the behavior this test is checking for', function() {
+      it('should accept 0 or falsy items as a memo', function() {
         var result = _.reduce([1, 2, 3], function(memo, item) {
           return memo * item;
         }, 0);
