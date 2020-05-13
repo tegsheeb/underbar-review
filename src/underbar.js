@@ -226,25 +226,31 @@
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
-    iterator = iterator || _.identity;
-
-    return _.reduce(collection, function(accumulatedVal, ele) {
-      if (Boolean(iterator(ele)) !== accumulatedVal) {
-        return false;
-      }
-      return (Boolean(iterator(ele)));
-    }, true);
-  };
-
-  // version 2 - not complete
+  // version 1
   // _.every = function(collection, iterator) {
-  //   return _.reduce(collection, function() {
-  //     var result =
+  //   // TIP: Try re-using reduce() here.
+  //   iterator = iterator || _.identity;
 
+  //   return _.reduce(collection, function(accumulatedVal, ele) {
+  //     if (Boolean(iterator(ele)) !== accumulatedVal) {
+  //       return false;
+  //     }
+  //     return (Boolean(iterator(ele)));
   //   }, true);
   // };
+
+  // version 2 - not complete
+  _.every = function(collection, iterator) {
+    return _.reduce(collection, function(memo, item) {
+      if (memo === false) {
+        return false;
+      }
+      if (!iterator) {
+        return Boolean(item);
+      }
+      return Boolean (iterator(item));
+    }, true);
+  };
 
 
   // Determine whether any of the elements pass a truth test. If no iterator is
