@@ -175,22 +175,39 @@
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
+  // Version 1
+  // _.reduce = function(collection, iterator, accumulator) {
+  //   var value;
+  //   if (accumulator === undefined) {
+  //     value = collection[0];
+  //     for (var i = 1; i < collection.length; i++) {
+  //       value = iterator(value, collection[i]);
+  //     }
+  //   } else {
+  //     value = accumulator;
+  //     _.each(collection, function(ele) {
+  //       if (iterator) {
+  //         value = iterator(value, ele);
+  //       }
+  //     });
+  //   }
+  //   return value;
+  // };
+  // Version 2
   _.reduce = function(collection, iterator, accumulator) {
-    var value;
+    var result;
     if (accumulator === undefined) {
-      value = collection[0];
-      for (var i = 1; i < collection.length; i++) {
-        value = iterator(value, collection[i]);
+      result = collection[0];
+      for ( var i = 1; i < collection.length; i++) {
+        result = iterator (result, collection[i]);
       }
     } else {
-      value = accumulator;
-      _.each(collection, function(ele) {
-        if (iterator) {
-          value = iterator(value, ele);
-        }
-      });
+      result = accumulator;
+      for ( var i = 0; i < collection.length; i++) {
+        result = iterator (result, collection[i]);
+      }
     }
-    return value;
+    return result;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -218,6 +235,15 @@
       return (Boolean(iterator(ele)));
     }, true);
   };
+
+  // version 2 - not complete
+  // _.every = function(collection, iterator) {
+  //   return _.reduce(collection, function() {
+  //     var result =
+
+  //   }, true);
+  // };
+
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
@@ -364,6 +390,15 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    // implements Fisher-Yates Shuffle
+    var result = array.slice();
+    for (var i = 0; i < result.length; i ++) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var placeholder = result [i];
+      result[i] = result[j];
+      result[j] = placeholder;
+    }
+    return result;
   };
 
 
