@@ -193,6 +193,8 @@
   //   }
   //   return value;
   // };
+
+
   // Version 2
   _.reduce = function(collection, iterator, accumulator) {
     var result;
@@ -203,9 +205,9 @@
       }
     } else {
       result = accumulator;
-      for ( var i = 0; i < collection.length; i++) {
-        result = iterator (result, collection[i]);
-      }
+      _.each(collection, function(value) {
+        result = iterator(result, value);
+      });
     }
     return result;
   };
