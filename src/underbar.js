@@ -41,7 +41,7 @@
     if (n === 0) {
       return [];
     }
-    return n === undefined ? array[array.length-1] : array.slice(-n);
+    return n === undefined ? array[array.length - 1] : array.slice(-n);
   };
 
   // Call iterator(value, key, collection) for each element of collection.
