@@ -178,24 +178,19 @@
   _.reduce = function(collection, iterator, accumulator) {
     var value;
     if (accumulator === undefined) {
-      value = 0;
-      _.each(collection, function(ele) {
-        if (iterator) {
-          iterator(value, ele);
-        }
-      });
-
+      value = collection[0];
+      for (var i = 1; i < collection.length; i++) {
+        value = iterator(value, collection[i]);
+      }
     } else {
       value = accumulator;
       _.each(collection, function(ele) {
         if (iterator) {
-          iterator(value, ele);
+          value = iterator(value, ele);
         }
       });
     }
-
     return value;
-
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -214,12 +209,24 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+
+    return _.reduce(collection, function(accumulatedVal, ele) {
+      if (Boolean(iterator(ele)) !== accumulatedVal) {
+        return false;
+      }
+      return (Boolean(iterator(ele)));
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator || _.identity;
+    return !_.every(collection, function(ele) {
+      return !iterator(ele);
+    });
   };
 
 
@@ -242,11 +249,32 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    //i: obj
+    //o: obj with all the keys
+    let result = obj;
+    for (var i = 1; i < arguments.length; i++) {
+      let args = arguments[i];
+      for (var key in args) {
+        result[key] = args[key];
+      }
+    }
+    return result;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    let result = obj;
+    for (var i = 1; i < arguments.length; i++) {
+      let args = arguments[i];
+      for (var key in args) {
+        if (result[key] === undefined) {
+          result[key] = args[key];
+        }
+      }
+    }
+    return result;
+
   };
 
 
@@ -290,6 +318,17 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    // var alreadyCalled = false;
+    var result = {};
+
+    return function(arg) {
+      var arg = JSON.stringify(arguments);
+      if (!result[arg]) {
+        result[arg] = func.apply(this, arguments);
+      }
+      return result[arg];
+    };
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -299,6 +338,18 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    //i: func, num, additional params
+    if (arguments.length === 2) {
+      setTimeout(func, wait);
+    } else {
+      setTimeout(func(arguments[2], arguments[3], wait));
+      // let args = [];
+      // for (let i = 2; i < arguments.length; i++) {
+      //   args.push(arguments[i]);
+      // }
+      // setTimeout(func.apply(this, args), wait);
+    }
+
   };
 
 
